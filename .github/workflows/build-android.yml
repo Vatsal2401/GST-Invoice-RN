@@ -1,14 +1,10 @@
 name: Build Android
 
 on:
-  push:
-    branches: [main]
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       profile:
-        description: 'EAS build profile'
+        description: 'Build profile'
         required: true
         default: 'preview'
         type: choice
@@ -40,10 +36,5 @@ jobs:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
-      - name: Build Android (APK — preview)
-        if: github.event_name != 'workflow_dispatch' || github.event.inputs.profile == 'preview'
-        run: eas build --platform android --profile preview --non-interactive
-
-      - name: Build Android (AAB — production)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.profile == 'production'
-        run: eas build --platform android --profile production --non-interactive
+      - name: Build Android
+        run: eas build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive

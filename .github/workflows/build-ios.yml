@@ -1,13 +1,10 @@
 name: Build iOS
 
 on:
-  push:
-    tags:
-      - 'v*'
   workflow_dispatch:
     inputs:
       profile:
-        description: 'EAS build profile'
+        description: 'Build profile'
         required: true
         default: 'production'
         type: choice
@@ -40,4 +37,4 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: Build iOS
-        run: eas build --platform ios --profile ${{ github.event.inputs.profile || 'production' }} --non-interactive
+        run: eas build --platform ios --profile ${{ github.event.inputs.profile }} --non-interactive
