@@ -30,6 +30,12 @@
       "expo-document-picker",
       "expo-asset",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "29c7854f-2b9e-497e-ad86-5d2f9dae3284"
+      }
+    },
+    "owner": "vatsal2401"
   }
 }
