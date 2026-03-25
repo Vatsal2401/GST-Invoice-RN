@@ -9,7 +9,7 @@ export function setLogoutCallback(fn: () => void) {
   onLogout = fn;
 }
 
-const apiClient = axios.create({ baseURL: BASE_URL });
+const apiClient = axios.create({ baseURL: BASE_URL, timeout: 15000 });
 
 // Attach access token to every request
 apiClient.interceptors.request.use(async (config) => {

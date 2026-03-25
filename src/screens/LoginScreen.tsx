@@ -37,7 +37,7 @@ export default function LoginScreen(): React.ReactElement {
     }
     setLoading(true);
     try {
-      const { data } = await axios.post(`${BASE_URL}/auth/login`, { email, password });
+      const { data } = await axios.post(`${BASE_URL}/auth/signin`, { email, password });
       await AsyncStorage.setItem('access_token', data.access_token);
       await AsyncStorage.setItem('refresh_token', data.refresh_token);
       setAuthenticated(true);

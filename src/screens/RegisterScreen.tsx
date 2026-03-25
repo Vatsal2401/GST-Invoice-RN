@@ -43,8 +43,8 @@ export default function RegisterScreen(): React.ReactElement {
     setLoading(true);
     try {
       // Register then auto-login
-      await axios.post(`${BASE_URL}/auth/register`, { name, email, password });
-      const { data } = await axios.post(`${BASE_URL}/auth/login`, { email, password });
+      await axios.post(`${BASE_URL}/auth/signup`, { name, email, password });
+      const { data } = await axios.post(`${BASE_URL}/auth/signin`, { email, password });
       await AsyncStorage.setItem('access_token', data.access_token);
       await AsyncStorage.setItem('refresh_token', data.refresh_token);
       setAuthenticated(true);
