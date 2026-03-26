@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import { setLogoutCallback } from '../lib/apiClient';
 import type { BusinessProfile } from '../types';
 
@@ -26,7 +26,8 @@ interface AppStore {
 
 export const useStore = create<AppStore>((set) => {
   const logout = () => {
-    AsyncStorage.multiRemove(['access_token', 'refresh_token']).catch(() => {});
+    SecureStore.deleteItemAsync('access_token').catch(() => {});
+    SecureStore.deleteItemAsync('refresh_token').catch(() => {});
     set({ isAuthenticated: false, businessProfile: null });
   };
   // Wire apiClient's 401 handler to this store's logout

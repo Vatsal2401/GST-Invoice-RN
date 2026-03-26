@@ -9,7 +9,7 @@ import {
   ScrollView,
   ActivityIndicator,
 } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
@@ -45,8 +45,8 @@ export default function RegisterScreen(): React.ReactElement {
       // Register then auto-login
       await axios.post(`${BASE_URL}/auth/signup`, { name, email, password });
       const { data } = await axios.post(`${BASE_URL}/auth/signin`, { email, password });
-      await AsyncStorage.setItem('access_token', data.access_token);
-      await AsyncStorage.setItem('refresh_token', data.refresh_token);
+      await SecureStore.setItemAsync('access_token', data.access_token);
+      await SecureStore.setItemAsync('refresh_token', data.refresh_token);
       setAuthenticated(true);
     } catch (err) {
       showToast(getApiError(err, 'Registration failed'), 'error');

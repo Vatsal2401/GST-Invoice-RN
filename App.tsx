@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 import { getBusinessProfile } from './src/services/businessService';
 import { useStore } from './src/store/useStore';
@@ -18,7 +18,7 @@ export default function App(): React.ReactElement {
   useEffect(() => {
     async function initialize() {
       try {
-        const token = await AsyncStorage.getItem('access_token');
+        const token = await SecureStore.getItemAsync('access_token');
         if (token) {
           setAuthenticated(true);
           // Pre-load business profile so it's available immediately

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 const BASE_URL = 'https://invoice-backend.autoreels.in';
 
@@ -13,7 +13,7 @@ const apiClient = axios.create({ baseURL: BASE_URL, timeout: 15000 });
 
 // Attach access token to every request
 apiClient.interceptors.request.use(async (config) => {
-  const token = await AsyncStorage.getItem('access_token');
+  const token = await SecureStore.getItemAsync('access_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -28,16 +28,17 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !original._retry) {
       original._retry = true;
       try {
-        const refresh = await AsyncStorage.getItem('refresh_token');
+        const refresh = await SecureStore.getItemAsync('refresh_token');
         if (!refresh) throw new Error('no refresh token');
         const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
           refresh_token: refresh,
         });
-        await AsyncStorage.setItem('access_token', data.access_token);
+        await SecureStore.setItemAsync('access_token', data.access_token);
         original.headers.Authorization = `Bearer ${data.access_token}`;
         return apiClient(original);
       } catch {
-        await AsyncStorage.multiRemove(['access_token', 'refresh_token']);
+        await SecureStore.deleteItemAsync('access_token');
+        await SecureStore.deleteItemAsync('refresh_token');
         if (onLogout) onLogout();
       }
     }
